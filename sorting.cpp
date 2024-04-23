@@ -27,6 +27,8 @@ public:
 
 int numberOfComparisons = 0;
 void Merge(Student students[],int numStudents,int x);
+void shell(Student students[],int numStudents,int x);
+int shell_sort(Student students[],int numStudents,int x);
 int mergeSort(Student students[], int start, int end,int x);
 int merge(Student students[], int l, int mid, int r,int x);
 void countSort(Student input[],int numStudents);
@@ -63,13 +65,59 @@ int main() {
     }
     inputFile.close();
 
-    
+    shell(students,numberOfStudents,1);
     Merge(students,numberOfStudents,1);
     Count(students,numberOfStudents);
     Selection(students,numberOfStudents,1);
     Insertion(students,numberOfStudents,1);
     Bubble(students,numberOfStudents,1);
     return 0;
+}
+void shell(Student students[],int numStudents,int x){
+    ofstream outputFile;
+    (x?outputFile.open("SortedByGPA.txt"):outputFile.open("SortedByName.txt"));
+    auto start = chrono::high_resolution_clock::now();
+    int numberOfComparisons = shell_sort(students, numStudents,x);
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration =end-start;
+    outputFile << "shell Sort\n";
+    outputFile << "Number of Comparisons: " << numberOfComparisons << "\n";
+    outputFile << "Running Time: " + to_string(duration.count())+ "  numStudents * log(numStudents)\n";
+    outputFile << "Sorted Student Elements:\n";
+    for (int i = 0; i < numStudents; ++i) {
+        outputFile << students[i].getName() << " " << students[i].getId() << " " << students[i].getGpa() << "\n";
+    }
+    outputFile.close();
+}
+int shell_sort(Student students[],int numStudents,int x){
+    int comp=0;
+    if (x){
+        for (int g =numStudents/2; g>0 ; g/=2) {
+            for (int i = g,j; i <numStudents ; ++i) {
+                double t=students[i].getGpa();
+                Student temp=students[i];
+                for ( j = i; j >0&&t<students[j-g].getGpa() ; j-=g) {
+                    comp++;
+                    students[j]=students[j-g];
+                }
+                students[j]=temp;
+            }
+        }
+    }
+    else{
+        for (int g =numStudents/2; g>0 ; g/=2) {
+            for (int i = g,j; i <numStudents ; ++i) {
+                string t=students[i].getName();
+                Student temp=students[i];
+                for ( j = i; j >0&&t<students[j-g].getName() ; j-=g) {
+                    comp++;
+                    students[j]=students[j-g];
+                }
+                students[j]=temp;
+            }
+        }
+    }
+    return comp;
 }
 void Merge(Student students[],int numStudents,int x)
 {
@@ -167,15 +215,15 @@ void countSort(Student input[],int numStudents){
 void count(Student students[],int numStudents)
 {
     ofstream outputFile;
-    
+
     outputFile.open("SortedByGPA.txt");
 
     auto start = chrono::high_resolution_clock::now();
-     
+
      countSort(students,numStudents);
-    
+
     auto end = chrono::high_resolution_clock::now();
-     
+
     int numberOfComparisons = 0;
     chrono::duration<double> duration =end-start;
     outputFile << "Count Sort\n";
