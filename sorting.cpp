@@ -82,7 +82,7 @@ void shell(Student students[],int numStudents,int x){
     chrono::duration<double> duration =end-start;
     outputFile << "shell Sort\n";
     outputFile << "Number of Comparisons: " << numberOfComparisons << "\n";
-    outputFile << "Running Time: " + to_string(duration.count())+ "  numStudents * log(numStudents)\n";
+    outputFile << "Running Time: " + to_string(duration.count())+ "  (numStudents)^2 \n";
     outputFile << "Sorted Student Elements:\n";
     for (int i = 0; i < numStudents; ++i) {
         outputFile << students[i].getName() << " " << students[i].getId() << " " << students[i].getGpa() << "\n";
